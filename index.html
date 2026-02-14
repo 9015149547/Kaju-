@@ -1,0 +1,251 @@
+<!DOCTYPEhtml>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sending you birthday smiles ☺️💖</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    text-align:center;
+    overflow:hidden;
+    background:linear-gradient(45deg,#ff9a9e,#fad0c4,#fbc2eb);
+    background-size:400% 400%;
+    animation:bg 10s infinite alternate;
+    color:white;
+}
+
+@keyframes bg{
+    0%{background-position:0% 50%;}
+    100%{background-position:100% 50%;}
+}
+
+#main{ display:none; }
+
+button{
+    padding:15px 30px;
+    font-size:18px;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:#ff4da6;
+    cursor:pointer;
+    margin-top:30px;
+}
+
+/* 🖼 IMAGE STYLE */
+#photo{
+    width:220px;
+    max-width:80%;
+    border-radius:20px;
+    margin-top:20px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.4);
+    transform:scale(0);
+    transition:1.2s ease;
+}
+
+/* 🎂 Cake */
+.cake{
+    position:relative;
+    margin:40px auto;
+    width:200px;
+    height:150px;
+    background:pink;
+    border-radius:20px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.3);
+    transform:rotateX(20deg);
+}
+
+.candle{
+    width:10px;
+    height:40px;
+    background:white;
+    position:absolute;
+    top:-40px;
+}
+
+.flame{
+    width:15px;
+    height:20px;
+    background:orange;
+    border-radius:50%;
+    position:absolute;
+    top:-20px;
+    left:-2px;
+    animation:flicker 0.3s infinite alternate;
+}
+
+@keyframes flicker{
+    from{opacity:1; transform:scale(1);}
+    to{opacity:0.6; transform:scale(1.2);}
+}
+
+/* 💗 Hearts */
+.heart{
+    position:absolute;
+    color:pink;
+    font-size:25px;
+    animation:float 6s linear infinite;
+}
+
+@keyframes float{
+    from{transform:translateY(100vh);}
+    to{transform:translateY(-10vh);}
+}
+
+/* 🎈 Balloons */
+.balloon{
+    position:absolute;
+    font-size:40px;
+    animation:float 8s linear infinite;
+}
+
+/* 🎆 Fireworks */
+.firework{
+    position:absolute;
+    width:10px;
+    height:10px;
+    background:white;
+    border-radius:50%;
+    animation:explode 1s ease-out forwards;
+}
+
+@keyframes explode{
+    to{
+        transform:scale(15);
+        opacity:0;
+    }
+}
+
+/* 💌 Message */
+#message{
+    display:none;
+    font-size:22px;
+    margin-top:20px;
+    animation:fadeIn 3s forwards;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div id="start">
+    <h1>A Special Surprise For You 💖</h1>
+    <button onclick="start()">Open Surprise 🎁</button>
+</div>
+
+<div id="main">
+
+    <!-- 🖼 Image -->
+    <img id="photo" src="yourphoto.jpg">
+
+    <h1>Blow the Candles 🎂💨</h1>
+
+    <div class="cake" id="cake">
+        <div class="candle" style="left:40px;">
+            <div class="flame"></div>
+        </div>
+        <div class="candle" style="left:90px;">
+            <div class="flame"></div>
+        </div>
+        <div class="candle" style="left:140px;">
+            <div class="flame"></div>
+        </div>
+    </div>
+
+    <div id="message">
+        💖 Happy Birthday kaju baby💖 <br>
+      hope  your day is as amazing as you and your day brings endless joy celebrate like there's no tomorrow 🥰 ✨
+    </div>
+</div>
+
+<audio id="music" src="music.mp3"></audio>
+<audio id="fireSound" src="firework.mp3"></audio>
+
+<script>
+function start(){
+    document.getElementById("start").style.display="none";
+    document.getElementById("main").style.display="block";
+    document.getElementById("music").play();
+    
+    createHearts();
+    createBalloons();
+    listenBlow();
+
+    // 🖼 Image Zoom Animation
+    setTimeout(()=>{
+        document.getElementById("photo").style.transform="scale(1)";
+    },300);
+}
+
+/* 💗 Hearts */
+function createHearts(){
+    setInterval(()=>{
+        let heart=document.createElement("div");
+        heart.className="heart";
+        heart.style.left=Math.random()*100+"vw";
+        heart.innerHTML="💗";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),6000);
+    },500);
+}
+
+/* 🎈 Balloons */
+function createBalloons(){
+    setInterval(()=>{
+        let balloon=document.createElement("div");
+        balloon.className="balloon";
+        balloon.style.left=Math.random()*100+"vw";
+        balloon.innerHTML="🎈";
+        document.body.appendChild(balloon);
+        setTimeout(()=>balloon.remove(),8000);
+    },1000);
+}
+
+/* 🎆 Fireworks */
+function firework(){
+    for(let i=0;i<10;i++){
+        let f=document.createElement("div");
+        f.className="firework";
+        f.style.left=Math.random()*100+"vw";
+        f.style.top=Math.random()*50+"vh";
+        document.body.appendChild(f);
+        setTimeout(()=>f.remove(),1000);
+    }
+    document.getElementById("fireSound").play();
+}
+
+/* 💨 Blow Detection */
+function listenBlow(){
+navigator.mediaDevices.getUserMedia({audio:true})
+.then(stream=>{
+const audioContext=new AudioContext();
+const mic=audioContext.createMediaStreamSource(stream);
+const analyser=audioContext.createAnalyser();
+mic.connect(analyser);
+analyser.fftSize=256;
+const data=new Uint8Array(analyser.frequencyBinCount);
+
+setInterval(()=>{
+analyser.getByteFrequencyData(data);
+let volume=data.reduce((a,b)=>a+b)/data.length;
+
+if(volume>50){
+document.querySelectorAll(".flame").forEach(f=>f.remove());
+firework();
+document.getElementById("message").style.display="block";
+}
+},200);
+});
+}
+</script>
+
+</body>
+</html>
